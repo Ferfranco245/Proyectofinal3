@@ -18,95 +18,94 @@ import javax.xml.transform.stream.StreamResult;
  */
 public class LeecturaUsuarios {
     public static void guardarUsuario(List<Usuario> usuarios, File archivo) {
-    try {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.newDocument();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.newDocument();
 
-        Element root = doc.createElement("usuarios");
-        doc.appendChild(root);
+            Element root = doc.createElement("usuarios");
+            doc.appendChild(root);
 
-        for (Usuario u : usuarios) {
-            Element usuarioElem = doc.createElement("usuario");
+            for (Usuario u : usuarios) {
+                Element usuarioElem = doc.createElement("usuario");
 
-            Element nombre = doc.createElement("nombre");
-            nombre.appendChild(doc.createTextNode(u.getNombre()));
-            usuarioElem.appendChild(nombre);
+                Element nombre = doc.createElement("nombre");
+                nombre.appendChild(doc.createTextNode(u.getNombre()));
+                usuarioElem.appendChild(nombre);
 
-            // Aquí corregimos: el tag es <usuario> para el nombre de usuario
-            Element user = doc.createElement("usuario");
-            user.appendChild(doc.createTextNode(u.getUsuario()));
-            usuarioElem.appendChild(user);
+                // Cambié la etiqueta a nombreUsuario para evitar confusión
+                Element user = doc.createElement("nombreUsuario");
+                user.appendChild(doc.createTextNode(u.getUsuario()));
+                usuarioElem.appendChild(user);
 
-            Element pass = doc.createElement("password");
-            pass.appendChild(doc.createTextNode(u.getPassword()));
-            usuarioElem.appendChild(pass);
+                Element pass = doc.createElement("password");
+                pass.appendChild(doc.createTextNode(u.getPassword()));
+                usuarioElem.appendChild(pass);
 
-            Element rol = doc.createElement("rol");
-            rol.appendChild(doc.createTextNode(String.valueOf(u.getRol())));
-            usuarioElem.appendChild(rol);
+                Element rol = doc.createElement("rol");
+                rol.appendChild(doc.createTextNode(String.valueOf(u.getRol())));
+                usuarioElem.appendChild(rol);
 
-            root.appendChild(usuarioElem);
+                root.appendChild(usuarioElem);
+            }
+
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty("indent", "yes"); // formato bonito
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(archivo);
+            transformer.transform(source, result);
+
+            System.out.println("Usuarios guardados correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        transformer.setOutputProperty("indent", "yes"); // para formato bonito
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(archivo);
-        transformer.transform(source, result);
-
-        System.out.println("Usuarios guardados correctamente.");
-
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-}
 
-public static List<Usuario> leecturaUsuarios(File archivo) {
-    List<Usuario> listaUsuarios = new ArrayList<>();
-    try {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(archivo);
-        doc.getDocumentElement().normalize();
+    public static List<Usuario> leecturaUsuarios(File archivo) {
+        List<Usuario> listaUsuarios = new ArrayList<>();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(archivo);
+            doc.getDocumentElement().normalize();
 
-        NodeList nodeList = doc.getElementsByTagName("usuario");
+            NodeList nodeList = doc.getElementsByTagName("usuario");
 
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
 
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
 
-                String nombre = getTagValue("nombre", element);
-                String usuario = getTagValue("usuario", element);  // Cambiado a "usuario"
-                String password = getTagValue("password", element);
-                String rolStr = getTagValue("rol", element);
+                    String nombre = getTagValue("nombre", element);
+                    String usuario = getTagValue("nombreUsuario", element);  // cambio aquí también
+                    String password = getTagValue("password", element);
+                    String rolStr = getTagValue("rol", element);
 
-                if (nombre != null && usuario != null && password != null && rolStr != null) {
-                    int rol = Integer.parseInt(rolStr);
-                    Usuario u = new Usuario(nombre, usuario, password, rol);
-                    listaUsuarios.add(u);
+                    if (nombre != null && usuario != null && password != null && rolStr != null) {
+                        int rol = Integer.parseInt(rolStr);
+                        Usuario u = new Usuario(nombre, usuario, password, rol);
+                        listaUsuarios.add(u);
+                    }
                 }
             }
-        }
 
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return listaUsuarios;
-}
-
-// Método auxiliar para evitar NPE
-private static String getTagValue(String tag, Element element) {
-    NodeList nodeList = element.getElementsByTagName(tag);
-    if (nodeList != null && nodeList.getLength() > 0) {
-        Node node = nodeList.item(0);
-        if (node != null) {
-            return node.getTextContent();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return listaUsuarios;
     }
-    return null;
-}
+
+    private static String getTagValue(String tag, Element element) {
+        NodeList nodeList = element.getElementsByTagName(tag);
+        if (nodeList != null && nodeList.getLength() > 0) {
+            Node node = nodeList.item(0);
+            if (node != null) {
+                return node.getTextContent();
+            }
+        }
+        return null;
+    }
 
 }

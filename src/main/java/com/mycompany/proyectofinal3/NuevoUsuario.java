@@ -4,6 +4,7 @@
  */
 package com.mycompany.proyectofinal3;
 
+import java.io.File;
 import javax.swing.JOptionPane;
 
 /**
@@ -151,7 +152,9 @@ public class NuevoUsuario extends javax.swing.JFrame {
 
     Usuario u = new Usuario(nombre, usuario, password, rol);
     Proyectofinal3.usuarios.add(u);
-
+    
+    File archivo = new File("usuarios.xml");
+   LeecturaUsuarios.guardarUsuario(Proyectofinal3.usuarios, archivo);
     JOptionPane.showMessageDialog(this, "Usuario creado exitosamente.");
     this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed

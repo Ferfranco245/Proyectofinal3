@@ -55,19 +55,19 @@ public class ArchivoXML extends javax.swing.JFrame {
     }
 
     // Mostrar lista en la tabla
-    private void mostrarUsuariosEnTabla(List<Usuario> usuarios) {
-        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
-        modelo.setRowCount(0); // limpiar tabla
+   private void mostrarUsuariosEnTabla(List<Usuario> listaUsuariosCargados1) {
+    DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+    modelo.setRowCount(0); // limpiar tabla
 
-        for (Usuario u : usuarios) {
-            String rolTexto = u.getRol() == 1 ? "Administrador" : "Vendedor";
-            modelo.addRow(new Object[]{
-                u.getNombre(),
-                u.getUsuario(),
-                u.getPassword(),
-                rolTexto
-            });
-        }
+    for (Usuario u : Proyectofinal3.usuarios) {
+        String rolTexto = u.getRol() == 1 ? "Administrador" : "Vendedor";
+        modelo.addRow(new Object[]{
+            u.getNombre(),
+            u.getUsuario(),
+            u.getPassword(),
+            rolTexto
+        });
+    }
     }
 
     

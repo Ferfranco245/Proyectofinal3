@@ -1,1 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><usuarios><usuario><nombre>Fernanda</nombre><usuario>admin</usuario><password>admin</password><rol>1</rol></usuario><usuario><nombre>Fernanda</nombre><usuario>Fernanda</usuario><password>Fer123</password><rol>2</rol></usuario></usuarios>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<usuarios>
+    <usuario>
+        <nombre>Fernanda</nombre>
+        <nombreUsuario>admin</nombreUsuario>
+        <password>admin</password>
+        <rol>1</rol>
+    </usuario>
+    <usuario>
+        <nombre>Fernanda</nombre>
+        <nombreUsuario>Fernanda</nombreUsuario>
+        <password>Fer123</password>
+        <rol>2</rol>
+    </usuario>
+    <usuario>
+        <nombre>elias</nombre>
+        <nombreUsuario>elias</nombreUsuario>
+        <password>Eli123</password>
+        <rol>1</rol>
+    </usuario>
+</usuarios>
